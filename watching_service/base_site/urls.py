@@ -4,7 +4,7 @@ from .views import feed, film_page, edit_film, delete_film, \
     register, login_view, feed_update, \
     get_streaming_video, edit_media, \
     logout_view, edit_video, get_image, \
-    delete_video, get_poster_image
+    delete_video, get_poster_image, feed_delete
 
 
 urlpatterns = [
@@ -24,5 +24,6 @@ urlpatterns = [
     path('images/p/<int:film_id>', get_poster_image),
     path('edit-video/<int:video_id>', edit_video),
     path('delete-video/<int:video_id>', delete_video),
-    path('feed-update', feed_update)
+    path('feed-update', feed_update),
+    path('delete-feed/<int:film_id>', feed_delete)
 ]

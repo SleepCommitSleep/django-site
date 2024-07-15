@@ -5,7 +5,9 @@
     <form class="login-form" method="POST" action="/login">
         {% csrf_token %}
         {% for form_field in user_creation_form %}
-        <div class="login-input-field">{{form_field.name}} {{ form_field }}</div>
+        <div class="login-input-field">
+            {{form_field.name}} {{ form_field }}
+        </div>
         {% endfor %}
         <input name="next"  type="hidden" value="{{ next }}">
         <input class="login-button button" type="submit" value="Войти">

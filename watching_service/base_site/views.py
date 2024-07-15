@@ -13,18 +13,9 @@ from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
-def make_list(start_number, end_number, pages):
-    for page_number in range(start_number, end_number + 1):
-        pages.append(page_number)
-    return pages
-
-
 def page_list(quantity, current_page):
     """
     Делает список для выбора страниц на сайте
-    :param quantity:
-    :param current_page:
-    :return:
     """
     pages = ['1']
     allowed_range = 2
@@ -78,13 +69,14 @@ def feed(request):
     if page_number > (feed_quantity / films_per_page + 1) or page_number < 0:
         return HttpResponseRedirect('/')
     start_index = 0 + films_per_page * (page_number - 1)
-    film_indexes = Feed.objects.order_by('-update_date')[start_index:films_per_page * page_number]
+    film_indexes = Feed.objects.order_by('-update_date')\
+        [start_index:films_per_page * page_number]
     film_data = []
     for one_film in film_indexes:
-        try:
-            film_data.append((Film.objects.get(id=one_film.serializable_value("film_id")), one_film))
-        except:
-            pass
+        film_data.append(
+            (Film.objects.get(id=one_film.serializable_value("film_id")),
+             one_film)
+        )
     pages_to_render = page_list(feed_quantity // films_per_page, page_number)
     transfer_data = {"feed_data": film_data,
                      "pages": pages_to_render}
@@ -100,6 +92,7 @@ def film_page(request, film_id):
     return a
 
 
+@permission_required("base_site.add_film", login_url="/login")
 def edit_film(request, film_id):
     film_data = get_object_or_404(Film, id=film_id)
     if request.method == "POST":
@@ -122,21 +115,24 @@ def add_film(request):
         film_name = request.GET.get('q', '')
         print(film_name)
         if film_name != "":
-            film_quantity = Film.objects.filter(title__icontains=film_name).order_by("id").count()
+            film_quantity = Film.objects.filter(
+                title__icontains=film_name).order_by("id").count()
             page_number = int(request.GET.get('page', 1))
             print(film_quantity)
             if page_number > film_quantity / films_per_page + 1 or page_number < 0:
                 return HttpResponseRedirect('/add-film')
             start_index = 0 + films_per_page * (page_number - 1)
-            film_list = Film.objects.filter(title__icontains=film_name).order_by('id')[start_index:films_per_page * page_number]
-            print(start_index)
+            film_list = Film.objects.filter(
+                title__icontains=film_name).order_by('id')\
+                [start_index:films_per_page * page_number]
         else:
             film_quantity = Film.objects.order_by("id").count()
             page_number = int(request.GET.get('page', 1))
             if page_number > film_quantity / films_per_page + 1 or page_number < 0:
                 return HttpResponseRedirect('/add-film')
             start_index = 0 + films_per_page * (page_number - 1)
-            film_list = Film.objects.order_by('id')[start_index:films_per_page * page_number]
+            film_list = Film.objects.order_by('id')\
+                [start_index:films_per_page * page_number]
         film_form = FilmForm()
         pages_to_render = page_list(film_quantity // films_per_page + 1, page_number)
         transfer_data = {"film_list": film_list,
@@ -172,7 +168,8 @@ def edit_media(request, film_id):
             return HttpResponseRedirect(f'/edit-film-media/{film_id}')
         start_index = 0 + videos_per_page * (page_number - 1)
 
-        video_list = Video.objects.filter(film_id=film_id).order_by('episode_number')[start_index:videos_per_page * page_number]
+        video_list = Video.objects.filter(film_id=film_id).order_by(
+            'episode_number')[start_index:videos_per_page * page_number]
         pages_to_render = page_list(v_quantity // videos_per_page + 1, page_number)
         film_media = FilmMediaForm(initial={"film_id": film_id})
         transfer_data = {"video_list": video_list,
@@ -199,20 +196,23 @@ def catalog(request):
         film_name = request.GET.get('q', '')
         print(film_name)
         if film_name != "":
-            film_quantity = Film.objects.filter(title__icontains=film_name).order_by("id").count()
+            film_quantity = Film.objects.filter(title__icontains=film_name
+                                                ).order_by("id").count()
             page_number = int(request.GET.get('page', 1))
             print(film_quantity)
             if page_number > film_quantity / films_per_page + 1 or page_number < 0:
                 return HttpResponseRedirect('/add-film')
             start_index = 0 + films_per_page * (page_number - 1)
-            film_list = Film.objects.filter(title__icontains=film_name).order_by('id')[start_index:films_per_page * page_number]
+            film_list = Film.objects.filter(title__icontains=film_name).order_by('id')\
+                [start_index:films_per_page * page_number]
         else:
             film_quantity = Film.objects.order_by("id").count()
             page_number = int(request.GET.get('page', 1))
             if page_number >= film_quantity / films_per_page + 1 or page_number < 0:
                 return HttpResponseRedirect('/add-film')
             start_index = 0 + films_per_page * (page_number - 1)
-            film_list = Film.objects.order_by('id')[start_index:films_per_page * page_number]
+            film_list = Film.objects.order_by('id')\
+                [start_index:films_per_page * page_number]
         film_form = FilmForm()
         pages_to_render = page_list(film_quantity // films_per_page + 1, page_number)
         transfer_data = {"film_list": film_list,
@@ -238,12 +238,11 @@ def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username,
+                            password=password)
         if user is not None:
             print(user.username)
             login(request, user)
-        else:
-            print("You are already logged in")
         next_link = request.POST["next"]
         print(next_link)
         return HttpResponseRedirect(f"{next_link}")
@@ -317,11 +316,13 @@ def feed_update(request):
         if page_number > (feed_quantity / films_per_page + 1) or page_number < 0:
             return HttpResponseRedirect('/')
         start_index = 0 + films_per_page * (page_number - 1)
-        film_indexes = Feed.objects.order_by('-update_date')[start_index:films_per_page * page_number]
+        film_indexes = Feed.objects.order_by('-update_date')\
+            [start_index:films_per_page * page_number]
         film_data = []
         for one_film in film_indexes:
             try:
-                film_data.append((Film.objects.get(id=one_film.serializable_value("film_id")), one_film))
+                film_data.append((Film.objects.get(
+                    id=one_film.serializable_value("film_id")), one_film))
             except:
                 pass
         pages_to_render = page_list(feed_quantity // films_per_page, page_number)
@@ -338,3 +339,13 @@ def feed_update(request):
         feed_q.update_comment = request.POST["update_comment"]
         feed_q.save()
         return HttpResponseRedirect("feed-update")
+
+
+@permission_required("base_site.add_film", login_url="/login")
+def feed_delete(request, film_id):
+    try:
+        feed_note = get_object_or_404(Feed, film_id=film_id)
+        feed_note.delete()
+        return HttpResponseRedirect("/feed-update")
+    except:
+        return HttpResponseNotFound("Something went wrong")

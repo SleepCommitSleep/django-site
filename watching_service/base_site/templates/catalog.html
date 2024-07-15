@@ -10,7 +10,8 @@
     <div class="page-choice block-film-feed">
         {% for page_number in pages %}
             {% if page_number != '...' %}
-                <a class="page-link" href="catalog?page={{ page_number }}">{{ page_number }}</a>
+                <a class="page-link"
+                   href="catalog?page={{ page_number }}">{{ page_number }}</a>
             {% elif page_number == '...' %}
                 ...
             {% endif %}
@@ -22,9 +23,11 @@
 
         <article class="catalog-film-block">
             {% if film.poster_img %}
-                <img class="img-catalog" src="/images/p/{{ film.id }} " href=/film/{{ film.id }}>
+                <img class="img-catalog" src="/images/p/{{ film.id }}"
+                     href=/film/{{ film.id }}>
             {% else %}
-                <img class="img-catalog" src="{% static "content/example-banner.png" %}">
+                <img class="img-catalog"
+                     src="{% static "content/example-banner.png" %}">
             {% endif %}
             <a href=/film/{{ film.id }} class>
             {{ film.title }}
@@ -38,7 +41,8 @@
     <div class="page-choice block-film-feed">
         {% for page_number in pages %}
             {% if page_number != '...' %}
-                <a class="page-link" href="catalog?page={{ page_number }}">{{ page_number }}</a>
+                <a class="page-link"
+                   href="catalog?page={{ page_number }}">{{ page_number }}</a>
             {% elif page_number == '...' %}
                 ...
             {% endif %}

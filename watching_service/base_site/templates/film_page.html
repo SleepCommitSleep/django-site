@@ -4,15 +4,21 @@
 <main class="feed">
     <article class="block-film-feed">
         {% if perms.base_site.add_film %}
-        <a href="/edit-film/{{ some_film.id }}">Изменить информацию о фильме</a>
+        <a href="/edit-film/{{ some_film.id }}">
+            Изменить информацию о фильме
+        </a>
         {% endif %}
-        <h3 class="film-title"><a class="title-link">{{ some_film.title }}</a></h3>
+        <h3 class="film-title">
+            <a class="title-link">{{ some_film.title }}</a>
+        </h3>
         <picture>
             <source>
             {% if some_film.poster_img %}
-                <img class="block-title-image" src="/images/p/{{ some_film.id }}">
+                <img class="block-title-image"
+                     src="/images/p/{{ some_film.id }}">
             {% else %}
-                <img class="block-title-image" src="{% static "content/example-banner.png" %}">
+                <img class="block-title-image"
+                     src="{% static "content/example-banner.png" %}">
             {% endif %}
         </picture>
         <div class="title-info">
@@ -43,9 +49,11 @@
             <ul class="episodes-list">
             {% for video in videos%}
                 {% if forloop.counter == 1%}
-                <li class="active" id="{{ video.id }}">{{ video.episode_number }}</li>
+                <li class="active"
+                    id="{{ video.id }}">{{ video.episode_number }}</li>
                 {% else %}
-                <li class="" id="{{ video.id }}">{{ video.episode_number }}</li>
+                <li class=""
+                    id="{{ video.id }}">{{ video.episode_number }}</li>
                 {% endif %}
 
             {% endfor %}
@@ -61,14 +69,8 @@
             data-setup="{}"
             >
 
-                <source src="/stream/{{ videos.0.id }}" type="video/mp4" />
-                <p class="vjs-no-js">
-                  To view this video please enable JavaScript, and consider upgrading to a
-                  web browser that
-                  <a href="https://videojs.com/html5-video-support/" target="_blank"
-                    >supports HTML5 video</a
-                  >
-                </p>
+                <source src="/stream/{{ videos.0.id }}"
+                        type="video/mp4" />
             </video>
     </div>
     </article>

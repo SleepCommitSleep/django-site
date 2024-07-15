@@ -19,24 +19,24 @@
         </table>
         <input type="submit" value="Добавить">
     </form>
-    <h2>Список фильмов</h2>
-    <div>
-        <form method="GET">
-            <input name="q" type="text">
-            <input type="submit" value="Найти">
-        </form>
-        <div>Текущий фильтр: {{ last_queue }}</div>
-    </div>
+    <h2>Список фильмов в ленте</h2>
     <table>
     {% for some_film, feed_film in feed_data %}
         <tr class="default-row">
-            <td class="default-column"><a href="/film/{{ some_film.id }}">{{ some_film.id }}</a></td>
-            <td class="default-column">{{ some_film.title }}</td>
-            <td class="default-column">{{ feed_film.update_date }}</td>
-            <td class="default-column">{{ feed_film.update_comment|default:"no comment" }}</td>
+            <td class="default-column"><a
+                    href="/film/{{ some_film.id }}">{{ some_film.id }}</a></td>
+            <td class="default-column">
+                {{ some_film.title }}
+            </td>
+            <td class="default-column">
+                {{ feed_film.update_date }}
+            </td>
+            <td class="default-column">
+                {{ feed_film.update_comment|default:"no comment" }}
+            </td>
             <td class="default-column">
                 <a href="edit-film/{{some_film.id}}">Изменить запись</a>|
-                <a href="delete-film/{{some_film.id}}">Удалить запись</a>
+                <a href="delete-feed/{{some_film.id}}">Удалить запись</a>
             </td>
         </tr>
     {% endfor %}
@@ -45,7 +45,10 @@
 
         {% for page_number in pages %}
             {% if page_number != '...' %}
-                <a class="page-link" href="add-film?page={{ page_number }}&q={{ last_queue }}">{{ page_number }}</a>
+                <a class="page-link"
+                   href="feed-update?page={{ page_number }}&q={{ last_queue }}">
+                    {{ page_number }}
+                </a>
             {% elif page_number == '...' %}
                 ...
             {% endif %}

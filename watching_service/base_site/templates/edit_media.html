@@ -3,7 +3,8 @@
 {% block main_content %}
 <main class="feed">
     <h2>{{ film.title }}</h2>
-    <form method="POST" action="/edit-film-media/{{ film_id }}" enctype="multipart/form-data">
+    <form method="POST" action="/edit-film-media/{{ film_id }}"
+          enctype="multipart/form-data">
         {% csrf_token %}
         <table>
             <tbody>
@@ -33,17 +34,13 @@
         <input type="submit" value="Добавить">
     </form>
     <h2>Список видео</h2>
-    <div>
-        <form method="GET">
-            <input name="q" type="text">
-            <input type="submit" value="Найти">
-        </form>
-        <div>Текущий фильтр: {{ last_queue }}</div>
-    </div>
     <table>
     {% for some_video in video_list %}
         <tr class="default-row">
-            <td class="default-column"><a href="/film/{{ some_video.id }}">{{ some_video.episode_number }}</a></td>
+            <td class="default-column"><a
+                    href="/film/{{ some_video.id }}">
+                {{ some_video.episode_number }}
+            </a></td>
             <td class="default-column">{{ some_video.video_file }}</td>
             <td class="default-column">
                 <a href="/edit-video/{{some_video.id}}">Изменить</a>|
@@ -56,7 +53,10 @@
 
         {% for page_number in pages %}
             {% if page_number != '...' %}
-                <a class="page-link" href="?page={{ page_number }}&q={{ last_queue }}">{{ page_number }}</a>
+                <a class="page-link"
+                   href="?page={{ page_number }}&q={{ last_queue }}">
+                    {{ page_number }}
+                </a>
             {% elif page_number == '...' %}
                 ...
             {% endif %}

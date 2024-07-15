@@ -2,7 +2,8 @@
 {% load static %}
 {% block main_content %}
 <main class="feed">
-    <form class="default-form" method="POST" enctype="multipart/form-data">
+    <form class="default-form" method="POST"
+          enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.film_id.as_hidden }}
         <table>
@@ -33,7 +34,8 @@
                 </tr>
                 <tr>
                     <th colspan="2 row">
-                         <img class="block-title-image" src="/images/p/{{ film_data.id }}">
+                         <img class="block-title-image"
+                              src="/images/p/{{ film_data.id }}">
                     </th>
                 </tr>
                 <tr>
@@ -43,7 +45,9 @@
             </tbody>
         </table>
         <input type="submit" value="Сохранить">
-        <a href="/edit-film-media/{{ film_data.id }}">Редактировать медиа</a>
+        <a href="/edit-film-media/{{ film_data.id }}">
+            Редактировать медиа
+        </a>
     </form>
 </main>
 {% endblock main_content %}

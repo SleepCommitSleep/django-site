@@ -3,7 +3,7 @@ for (let i = 0; i < document.getElementsByClassName("episodes-list")[0].children
     document.getElementsByClassName("episodes-list")[0].children[i].onclick = function()
     {
         if (document.querySelector(".episodes-list .active") != null){
-            document.querySelector(".episodes-list .active").setAttribute("class", "")
+            document.querySelector(".episodes-list .active").setAttribute("class", "");
         };
         document.getElementsByClassName("episodes-list")[0].children[i].setAttribute("class", "active");
         var video_id = document.getElementsByClassName("episodes-list")[0].children[i].attributes["id"].value;
