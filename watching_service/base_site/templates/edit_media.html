@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main_content %}
+<main class="feed">
+    <h2>{{ film.title }}</h2>
+    <form method="POST" action="/edit-film-media/{{ film_id }}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            <tbody>
+                <tr>
+                    <td><label>id фильма</label></td>
+                    <td>{{ film_id }} {{ form.film_id.as_hidden}}</td>
+                </tr>
+
+                <tr>
+                    <td><label>Превью</label></td>
+                    <td>{{ form.image }}</td>
+                </tr>
+                <tr>
+                    <td><label>Видео файл</label></td>
+                    <td>{{ form.video_file }}</td>
+                </tr>
+                <tr>
+                    <td><label>Ссылка на видео</label></td>
+                    <td>{{ form.video_url }}</td>
+                </tr>
+                <tr>
+                    <td><label>Номер эпизода</label></td>
+                    <td>{{ form.episode_number }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="submit" value="Добавить">
+    </form>
+    <h2>Список видео</h2>
+    <div>
+        <form method="GET">
+            <input name="q" type="text">
+            <input type="submit" value="Найти">
+        </form>
+        <div>Текущий фильтр: {{ last_queue }}</div>
+    </div>
+    <table>
+    {% for some_video in video_list %}
+        <tr class="default-row">
+            <td class="default-column"><a href="/film/{{ some_video.id }}">{{ some_video.episode_number }}</a></td>
+            <td class="default-column">{{ some_video.video_file }}</td>
+            <td class="default-column">
+                <a href="/edit-video/{{some_video.id}}">Изменить</a>|
+                <a href="/delete-video/{{some_video.id}}">Удалить</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    <div class="page-choice block-film-feed">
+
+        {% for page_number in pages %}
+            {% if page_number != '...' %}
+                <a class="page-link" href="?page={{ page_number }}&q={{ last_queue }}">{{ page_number }}</a>
+            {% elif page_number == '...' %}
+                ...
+            {% endif %}
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock main_content %}

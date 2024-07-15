@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main_content %}
+<main class="feed">
+    <form method="POST" action="/feed-update">
+        {% csrf_token %}
+        <table>
+            <tbody>
+                <tr>
+                    <td><label>id фильма</label></td>
+                    <td>{{ form.film_id }}</td>
+                </tr>
+                {{form.update_date.as_hidden}}
+                <tr>
+                    <td><label>Комментарий для добавления в ленту</label></td>
+                    <td>{{ form.update_comment }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="submit" value="Добавить">
+    </form>
+    <h2>Список фильмов</h2>
+    <div>
+        <form method="GET">
+            <input name="q" type="text">
+            <input type="submit" value="Найти">
+        </form>
+        <div>Текущий фильтр: {{ last_queue }}</div>
+    </div>
+    <table>
+    {% for some_film, feed_film in feed_data %}
+        <tr class="default-row">
+            <td class="default-column"><a href="/film/{{ some_film.id }}">{{ some_film.id }}</a></td>
+            <td class="default-column">{{ some_film.title }}</td>
+            <td class="default-column">{{ feed_film.update_date }}</td>
+            <td class="default-column">{{ feed_film.update_comment|default:"no comment" }}</td>
+            <td class="default-column">
+                <a href="edit-film/{{some_film.id}}">Изменить запись</a>|
+                <a href="delete-film/{{some_film.id}}">Удалить запись</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    <div class="page-choice block-film-feed">
+
+        {% for page_number in pages %}
+            {% if page_number != '...' %}
+                <a class="page-link" href="add-film?page={{ page_number }}&q={{ last_queue }}">{{ page_number }}</a>
+            {% elif page_number == '...' %}
+                ...
+            {% endif %}
+        {% endfor %}
+    </div>
+</main>
+{% endblock main_content %}

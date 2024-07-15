@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_additional %}
+    <link rel="stylesheet" href="{% static "css/feed.css" %}"/>
+{% endblock head_additional %}
+
+{% block main_content %}
+<main class="feed">
+    <div class="page-choice block-film-feed">
+        {% for page_number in pages %}
+            {% if page_number != '...' %}
+                <a class="page-link" href="/?page={{ page_number }}">{{ page_number }}</a>
+            {% elif page_number == '...' %}
+                ...
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% if feed_data != None %}
+    {% for film, feed_film in feed_data %}
+    <article class="block-film-feed">
+        <h3 class="film-title"><a class="title-link" href="film/{{ film.id }}">{{ film.title }}</a></h3>
+        <picture>
+            <source>
+            {% if film.poster_img %}
+                <img class="block-title-image" src="/images/p/{{ film.id }}">
+            {% else %}
+                <img class="block-title-image" src="{% static "content/example-banner.png" %}">
+            {% endif %}
+        </picture>
+        <div class="title-info">
+                <p class="line-info">
+                    <span class="key">Формат выпуска: </span>
+                    <span class="value">{{ film.type }}</span>
+                </p>
+                <p class="line-info">
+                    <span class="key">Жанры: </span>
+                    <span class="value">{{ film.genres }}</span>
+                </p>
+                <p class="line-info">
+                    <span class="key">Дата выпуска: </span>
+                    <span class="value">{{ film.release_date }}</span>
+                </p>
+        </div>
+        <div>
+            <h2>Описание</h2>
+            <div class="film-description">
+                {{ film.description }}
+            </div>
+        </div>
+        {% if feed_film.update_comment %}
+        <div>
+            <h3>Обновлено:{{ feed_film.update_comment }}</h3>
+        </div>
+        {% endif %}
+
+    </article>
+    {% endfor %}
+    {% endif %}
+    <div class="page-choice block-film-feed">
+        {% for page_number in pages %}
+            {% if page_number != '...' %}
+                <a class="page-link" href="/?page={{ page_number }}">{{ page_number }}</a>
+            {% elif page_number == '...' %}
+                ...
+            {% endif %}
+        {% endfor %}
+    </div>
+</main>
+{% endblock main_content %}

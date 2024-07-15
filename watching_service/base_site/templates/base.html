@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% load static %}
+<head>
+    <meta charset="utf-8" />
+    <title>Test</title>
+    <link rel="stylesheet" href="{% static "css/styles.css" %}"/>
+    <link href="https://vjs.zencdn.net/8.12.0/video-js.css" rel="stylesheet"/>
+    <title>{% block title %}Default title{% endblock title %}</title>
+    {% block head_additional %}{% endblock head_additional %}
+</head>
+<body>
+    <div class="navigation">
+        <nav class="up-navigation">
+            <a class="nav-element"
+               href="/">
+                Главаная
+            </a>
+            <a href="/catalog"
+               class="nav-element">
+                Каталог
+            </a>
+            <form class="nav-element search"
+                  method="GET"
+                  action="/catalog">
+                <input name="q" class="search-field"
+                       placeholder="Поиск..."
+                       maxlength="240">
+                <input  class="search-nav-submit"
+                        type="submit"
+                        value="Найти">
+            </form>
+            {% if user.is_authenticated %}
+               <a class="nav-element">
+                    {{ request.user.username }}
+               </a>
+                <a class="nav-element"
+                   href="/logout?next={{ request.path }}">
+                    Выйти
+                </a>
+            {% else %}
+                <a class="nav-element"
+                   href="/login?next={{ request.path }}">
+                    Войти
+                </a>
+                <a class="nav-element"
+                   href="/register">
+                    Регистрация
+                </a>
+            {% endif %}
+        </nav>
+
+    </div>
+    {% block main_content %}{% endblock main_content %}
+</body>

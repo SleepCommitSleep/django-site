@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main_content %}
+<main class="feed">
+    <form class="login-form" method="POST" action="/register">
+        {% csrf_token %}
+        {% for form_field in user_creation_form %}
+        <div class="login-input-field">{{form_field.name}} {{ form_field }}</div>
+        {% endfor %}
+        <input class="button login-button" type="submit" value="Регистрация">
+    </form>
+</main>
+{% endblock main_content %}

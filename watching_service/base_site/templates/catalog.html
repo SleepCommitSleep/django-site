@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_additional %}
+    <link rel="stylesheet" href="{% static "css/feed.css" %}"/>
+{% endblock head_additional %}
+
+{% block main_content %}
+<main class="feed">
+    <div class="page-choice block-film-feed">
+        {% for page_number in pages %}
+            {% if page_number != '...' %}
+                <a class="page-link" href="catalog?page={{ page_number }}">{{ page_number }}</a>
+            {% elif page_number == '...' %}
+                ...
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="catalog">
+    {% if film_list != None %}
+        {% for film in film_list %}
+
+        <article class="catalog-film-block">
+            {% if film.poster_img %}
+                <img class="img-catalog" src="/images/p/{{ film.id }} " href=/film/{{ film.id }}>
+            {% else %}
+                <img class="img-catalog" src="{% static "content/example-banner.png" %}">
+            {% endif %}
+            <a href=/film/{{ film.id }} class>
+            {{ film.title }}
+            </a>
+        </article>
+
+        {% endfor %}
+        </div>
+    {% endif %}
+    </div>
+    <div class="page-choice block-film-feed">
+        {% for page_number in pages %}
+            {% if page_number != '...' %}
+                <a class="page-link" href="catalog?page={{ page_number }}">{{ page_number }}</a>
+            {% elif page_number == '...' %}
+                ...
+            {% endif %}
+        {% endfor %}
+    </div>
+</main>
+{% endblock main_content %}

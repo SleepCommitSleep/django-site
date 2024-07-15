@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main_content %}
+<main class="feed">
+    <form class="default-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.film_id.as_hidden }}
+        <table>
+            <tbody>
+                <tr>
+                    <td><label>Название</label></td>
+                    <td>{{ form.title }}</td>
+                </tr>
+                <tr>
+                    <td><label>Формат выпуска</label></td>
+                    <td>{{ form.type }}</td>
+                </tr>
+                <tr>
+                    <td><label>Жанры</label></td>
+                    <td>{{ form.genres }}</td>
+                </tr>
+                <tr>
+                    <td><label>Дата выпуска</label></td>
+                    <td>{{ form.release_date }}</td>
+                </tr>
+                <tr>
+                    <td><label>Ссылка на постер</label></td>
+                    <td>{{ form.poster_img_link }}</td>
+                </tr>
+                <tr>
+                    <td><label>Файл постера</label></td>
+                    <td>{{ form.poster_img }}</td>
+                </tr>
+                <tr>
+                    <th colspan="2 row">
+                         <img class="block-title-image" src="/images/p/{{ film_data.id }}">
+                    </th>
+                </tr>
+                <tr>
+                    <td><label>Описание</label></td>
+                    <td>{{form.description }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="submit" value="Сохранить">
+        <a href="/edit-film-media/{{ film_data.id }}">Редактировать медиа</a>
+    </form>
+</main>
+{% endblock main_content %}

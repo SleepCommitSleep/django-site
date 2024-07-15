@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main_content %}
+<main class="feed">
+    <form method="POST" action="/add-film" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            <tbody>
+                <tr>
+                    <td><label>Название</label></td>
+                    <td>{{ form.title }}</td>
+                </tr>
+                <tr>
+                    <td><label>Формат выпуска</label></td>
+                    <td>{{ form.type }}</td>
+                </tr>
+                <tr>
+                    <td><label>Жанры</label></td>
+                    <td>{{ form.genres }}</td>
+                </tr>
+                <tr>
+                    <td><label>Дата выпуска</label></td>
+                    <td>{{ form.release_date }}</td>
+                </tr>
+                <tr>
+                    <td><label>Ссылка на постер</label></td>
+                    <td>{{ form.poster_img_link }}</td>
+                </tr>
+                <tr>
+                    <td><label>Файл постера</label></td>
+                    <td>{{ form.poster_img }}</td>
+                </tr>
+                <tr>
+                    <td><label>Описание</label></td>
+                    <td>{{ form.description }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="submit" value="Добавить">
+    </form>
+    <h2>Список фильмов</h2>
+    <div>
+        <form method="GET">
+            <input name="q" type="text">
+            <input type="submit" value="Найти">
+
+        </form>
+        <div>Текущий фильтр: {{ last_queue }}</div>
+        <a href="add-film/test">Добавить тестовый</a>
+    </div>
+    <table>
+    {% for some_film in film_list %}
+        <tr class="default-row">
+            <td class="default-column"><a href="/film/{{ some_film.id }}">{{ some_film.id }}</a></td>
+            <td class="default-column">{{ some_film.title }}</td>
+            <td class="default-column">{{ some_film.type }}</td>
+            <td class="default-column">{{ some_film.genres }}</td>
+            <td class="default-column">{{ some_film.release_date }}</td>
+            <td class="default-column">{{ some_film.poster_img_link }}</td>
+            <td class="default-column">
+                <a href="edit-film/{{some_film.id}}">Изменить</a>|
+                <a href="delete-film/{{some_film.id}}">Удалить</a>|
+                <a href="edit-film-media/{{some_film.id}}">Редактировать медиа</a>|
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    <div class="page-choice block-film-feed">
+
+        {% for page_number in pages %}
+            {% if page_number != '...' %}
+                <a class="page-link" href="add-film?page={{ page_number }}&q={{ last_queue }}">{{ page_number }}</a>
+            {% elif page_number == '...' %}
+                ...
+            {% endif %}
+        {% endfor %}
+    </div>
+</main>
+{% endblock main_content %}

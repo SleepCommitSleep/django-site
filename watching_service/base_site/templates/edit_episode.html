@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main_content %}
+<main class="feed">
+    <h2>{{ film.title }}</h2>
+    <form method="POST" action="/edit-video/{{ video.id }}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            <tbody>
+                <tr>
+                    <td><label>id видео</label></td>
+                    <td>{{ video.film_id }} {{ form.film_id.as_hidden}}</td>
+                </tr>
+                <tr>
+                    <td><label>Превью</label></td>
+                    <td>{{ form.image }}</td>
+                </tr>
+                <tr>
+                    <td><label>Видео файл</label></td>
+                    <td>{{ form.video_file }}</td>
+                </tr>
+                <tr>
+                    <td><label>Ссылка на видео</label></td>
+                    <td>{{ form.video_url }}</td>
+                </tr>
+                <tr>
+                    <th colspan="2 row">
+                        <div class="player-block">
+                            <video
+                            id="my-video"
+                            class="video-js"
+                            controls="controls"
+                            preload="auto"
+                            width="640"
+                            height="264"
+                            poster="/images/{{ video.id }}"
+                            data-setup="{}"
+                            >
+                                <source src="/stream/{{ video.id }}" type="video/mp4" />
+                                <p class="vjs-no-js">
+                                  To view this video please enable JavaScript, and consider upgrading to a
+                                  web browser that
+                                  <a href="https://videojs.com/html5-video-support/" target="_blank"
+                                    >supports HTML5 video</a
+                                  >
+                                </p>
+                            </video>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <td><label>Номер эпизода</label></td>
+                    <td>{{ form.episode_number }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="submit" value="Изменить">
+    </form>
+</main>
+<script src="https://vjs.zencdn.net/8.12.0/video.min.js"></script>
+{% endblock main_content %}

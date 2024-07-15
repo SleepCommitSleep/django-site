@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main_content %}
+<main class="feed">
+    <article class="block-film-feed">
+        {% if perms.base_site.add_film %}
+        <a href="/edit-film/{{ some_film.id }}">Изменить информацию о фильме</a>
+        {% endif %}
+        <h3 class="film-title"><a class="title-link">{{ some_film.title }}</a></h3>
+        <picture>
+            <source>
+            {% if some_film.poster_img %}
+                <img class="block-title-image" src="/images/p/{{ some_film.id }}">
+            {% else %}
+                <img class="block-title-image" src="{% static "content/example-banner.png" %}">
+            {% endif %}
+        </picture>
+        <div class="title-info">
+                <p class="line-info">
+                    <span class="key">Тип выпуска: </span>
+                    <span class="value">{{ some_film.type }}</span>
+                </p>
+                <p class="line-info">
+                    <span class="key">Жанры: </span>
+                    <span class="value">{{ some_film.genres }}</span>
+                </p>
+                <p class="line-info">
+                    <span class="key">Дата выпуска: </span>
+                    <span class="value">{{ some_film.release_date }}</span>
+                </p>
+        </div>
+        <div>
+            <h2>Описание</h2>
+            <div class="film-description">
+                {{ some_film.description }}
+            </div>
+        </div>
+        <div>
+            <h3>Обновлено:{{ feed_data.update_comment }}</h3>
+        </div>
+
+        <div class="player-block">
+            <ul class="episodes-list">
+            {% for video in videos%}
+                {% if forloop.counter == 1%}
+                <li class="active" id="{{ video.id }}">{{ video.episode_number }}</li>
+                {% else %}
+                <li class="" id="{{ video.id }}">{{ video.episode_number }}</li>
+                {% endif %}
+
+            {% endfor %}
+            </ul>
+            <video
+            id="my-video"
+            class="video-js"
+            controls="controls"
+            preload="auto"
+            width="640"
+            height="264"
+            poster="/images/{{ videos.0.id }}"
+            data-setup="{}"
+            >
+
+                <source src="/stream/{{ videos.0.id }}" type="video/mp4" />
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a
+                  web browser that
+                  <a href="https://videojs.com/html5-video-support/" target="_blank"
+                    >supports HTML5 video</a
+                  >
+                </p>
+            </video>
+    </div>
+    </article>
+
+    <script src='{% static "js/episode_choice.js"%}'></script>
+    <script src="https://vjs.zencdn.net/8.12.0/video.min.js"></script>
+</main>
+{% endblock main_content %}
