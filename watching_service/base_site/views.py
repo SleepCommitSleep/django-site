@@ -64,7 +64,7 @@ def fill_random_staff():
 def feed(request):
     feed_quantity = Feed.objects.count()
     page_number = int(request.GET.get('page', 1))
-    films_per_page = 10
+    films_per_page = 5
     print(feed_quantity)
     if page_number > (feed_quantity / films_per_page + 1) or page_number < 0:
         return HttpResponseRedirect('/')
