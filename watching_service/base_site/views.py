@@ -141,7 +141,7 @@ def add_film(request):
                          "last_queue": film_name}
         return render(request, "add_film.html", context=transfer_data)
     elif request.method == "POST":
-        film_data = FilmForm(request.POST)
+        film_data = FilmForm(request.POST, request.FILES)
         film_data.save()
         return HttpResponseRedirect("/add-film")
 
@@ -333,11 +333,15 @@ def feed_update(request):
                          "form": form}
         return render(request, "feed_add.html", context=transfer_data)
     elif request.method == "POST":
-        get_object_or_404(Film, id=request.POST["film_id"])
-        feed_q = Feed.objects.get_or_create(film_id=request.POST["film_id"])[0]
-        feed_q.update_date = datetime.datetime.now()
-        feed_q.update_comment = request.POST["update_comment"]
-        feed_q.save()
+        film = get_object_or_404(Film, id=request.POST["film_id"])
+        try:
+            feed_q = Feed.objects.get(film_id=film)
+            feed_q.update_comment = request.POST["update_comment"]
+            feed_q.save()
+        except:
+            Feed.objects.create(film_id=film,
+                                update_date=datetime.datetime.now(),
+                                update_comment=request.POST["update_comment"])
         return HttpResponseRedirect("feed-update")
 
 
